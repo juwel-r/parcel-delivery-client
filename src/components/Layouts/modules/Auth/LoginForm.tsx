@@ -22,13 +22,20 @@ import { loginSchema } from "@/utils/zodSchema";
 import { useForm } from "react-hook-form";
 import type z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Field, FieldDescription } from "@/components/ui/field";
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
+import { authApi, useLoginMutation } from "@/redux/features/auth/authApi";
+import { toast } from "sonner";
+import { useAppDispatch } from "@/redux/hook";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const [login] = useLoginMutation();
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -38,7 +45,22 @@ export function LoginForm({
   });
 
   const onSubmit = async (data: z.infer<typeof loginSchema>) => {
-    console.log(data);
+    const credential = {
+      email: data.email,
+      password: data.password,
+    };
+
+    try {
+      const result = await login(credential).unwrap();
+      toast.success(result.message);
+
+      dispatch(authApi.util.invalidateTags(["USER"]));
+
+      navigate(location.state || "/");
+    } catch (error: any) {
+      console.log(error);
+      toast.error(error.data.message || error.data);
+    }
   };
 
   return (
@@ -50,7 +72,10 @@ export function LoginForm({
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 flex flex-col">
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="space-y-4 flex flex-col"
+            >
               {/* Email */}
               <FormField
                 control={form.control}

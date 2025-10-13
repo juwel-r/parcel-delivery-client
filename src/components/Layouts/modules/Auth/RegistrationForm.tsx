@@ -31,11 +31,15 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router";
+import { useRegisterMutation } from "@/redux/features/auth/authApi";
+import { toast } from "sonner";
 
 export function RegistrationForm({
   className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) {
+  const [register] = useRegisterMutation();
+
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -43,11 +47,26 @@ export function RegistrationForm({
       email: "",
       password: "",
       confirmPassword: "",
-      role:"SENDER"
+      role: "SENDER",
     },
   });
-  const onSubmit = (value: z.infer<typeof registerSchema>) => {
-    console.log(value);
+
+  const onSubmit = async (data: z.infer<typeof registerSchema>) => {
+    const userInfo = {
+      name: data.name,
+      email: data.email,
+      password: data.password,
+      role: data.role,
+    };
+
+    try {
+      const result = await register(userInfo).unwrap();
+      toast.success(result.message);
+      console.log(result);
+    } catch (error: any) {
+      console.log(error);
+      toast.error(error.data.message || error.data);
+    }
   };
 
   return (
@@ -148,13 +167,13 @@ export function RegistrationForm({
                   </FormItem>
                 )}
               />
-                      <Button type="submit" className="w-1/3 mx-auto">
+              <Button type="submit" className="w-1/3 mx-auto">
                 Register
               </Button>
               <FormDescription className="">
-               Already have an account?&nbsp;
-                <Link className="underline" to="/login"> 
-                   Login
+                Already have an account?&nbsp;
+                <Link className="underline" to="/login">
+                  Login
                 </Link>
               </FormDescription>
             </form>
