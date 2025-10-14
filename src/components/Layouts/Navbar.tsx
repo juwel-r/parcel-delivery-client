@@ -13,6 +13,13 @@ import {
 import { ThemeToggler } from "../ThemeToggler";
 import { Link } from "react-router";
 import { NavLink } from "react-router";
+import {
+  authApi,
+  useLogOutMutation,
+  useUserInfoQuery,
+} from "@/redux/features/auth/authApi";
+import { useAppDispatch } from "@/redux/hook";
+import { toast } from "sonner";
 
 // Navigation links array to be used in both desktop and mobile menus
 const navigationLinks = [
@@ -21,6 +28,23 @@ const navigationLinks = [
 ];
 
 export default function Navbar() {
+  const { data, isLoading } = useUserInfoQuery({});
+  const [logout] = useLogOutMutation();
+  const dispatch = useAppDispatch();
+
+  const handleLogout = async () => {
+    try {
+      const res = await logout();
+      console.log(res);
+      toast.success(res.data.message);
+      dispatch(authApi.util.resetApiState());
+    } catch (error: any) {
+      console.log(error);
+      toast.error(error?.data?.message || "Something went wrong");
+    }
+  };
+
+  console.log(data);
   return (
     <header className="container mx-auto border-b">
       <div className="flex h-16 items-center justify-between gap-4">
@@ -66,10 +90,7 @@ export default function Navbar() {
                 <NavigationMenuList className="flex-col items-start gap-0 md:gap-2">
                   {navigationLinks.map((link, index) => (
                     <NavigationMenuItem key={index} className="w-full">
-                      <NavLink
-                        to={link.href}
-                        className="py-1.5"
-                      >
+                      <NavLink to={link.href} className="py-1.5">
                         {link.label}
                       </NavLink>
                     </NavigationMenuItem>
@@ -103,9 +124,16 @@ export default function Navbar() {
         {/* Right side */}
         <div className="flex items-center gap-2">
           <ThemeToggler />
-          <Button asChild size="sm" className="text-sm">
-            <Link to={'/login'}>Login</Link>
-          </Button>
+
+          {!isLoading && data ? (
+            <Button size="sm" className="text-sm" onClick={handleLogout}>
+              Logout
+            </Button>
+          ) : (
+            <Button asChild size="sm" className="text-sm">
+              <Link to={"/login"}>Login</Link>
+            </Button>
+          )}
         </div>
       </div>
     </header>

@@ -18,17 +18,16 @@ export const authApi = baseApi.injectEndpoints({
       }),
     }),
 
-    logOut: builder.mutation({
-      query: (userData) => ({
+    logOut: builder.mutation<unknown, void>({
+      query: () => ({
         url: "/auth/logout",
         method: "POST",
-        data: userData,
       }),
     }),
 
     userInfo: builder.query({
       query: () => ({
-        url: "/user/register",
+        url: "/user/me",
         method: "GET",
       }),
     }),

@@ -30,7 +30,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useRegisterMutation } from "@/redux/features/auth/authApi";
 import { toast } from "sonner";
 
@@ -39,6 +39,7 @@ export function RegistrationForm({
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) {
   const [register] = useRegisterMutation();
+  const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
@@ -62,10 +63,17 @@ export function RegistrationForm({
     try {
       const result = await register(userInfo).unwrap();
       toast.success(result.message);
+      navigate("/login");
       console.log(result);
     } catch (error: any) {
       console.log(error);
-      toast.error(error.data.message || error.data);
+
+      const errorMessage =
+        error?.data?.message?.errorSources?.[0]?.message ||
+        error?.data?.message ||
+        "Something went wrong!";
+
+      toast.error(errorMessage);
     }
   };
 
