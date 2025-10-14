@@ -1,5 +1,5 @@
 import Logo from "@/assets/icons/Logo";
-import { RegistrationForm } from "@/components/Layouts/modules/Auth/RegistrationForm";
+import { RegistrationForm } from "@/components/modules/Auth/RegistrationForm";
 import { Link } from "react-router";
 
 export default function Registration() {

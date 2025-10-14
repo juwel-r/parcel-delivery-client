@@ -1,5 +1,5 @@
 import Logo from "@/assets/icons/Logo";
-import { LoginForm } from "@/components/Layouts/modules/Auth/LoginForm";
+import { LoginForm } from "@/components/modules/Auth/LoginForm";
 import { Link } from "react-router";
 
 export default function Login() {

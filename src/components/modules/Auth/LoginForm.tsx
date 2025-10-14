@@ -53,9 +53,7 @@ export function LoginForm({
     try {
       const result = await login(credential).unwrap();
       toast.success(result.message);
-
       dispatch(authApi.util.invalidateTags(["USER"]));
-
       navigate(location.state || "/");
     } catch (error: any) {
       console.log(error);

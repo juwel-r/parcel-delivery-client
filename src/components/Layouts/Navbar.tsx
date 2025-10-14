@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
   NavigationMenuItem,
+  NavigationMenuLink,
   NavigationMenuList,
 } from "@/components/ui/navigation-menu";
 import {
@@ -11,8 +12,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { ThemeToggler } from "../ThemeToggler";
-import { Link } from "react-router";
-import { NavLink } from "react-router";
+import { Link, NavLink } from "react-router";
 import {
   authApi,
   useLogOutMutation,
@@ -20,29 +20,36 @@ import {
 } from "@/redux/features/auth/authApi";
 import { useAppDispatch } from "@/redux/hook";
 import { toast } from "sonner";
+import { role } from "@/constant/role";
 
-// Navigation links array to be used in both desktop and mobile menus
 const navigationLinks = [
-  { href: "/", label: "Home", active: true },
-  { href: "about", label: "About" },
+  { href: "/", label: "Home", role: "PUBLIC" },
+  { href: "/tours", label: "Tours", role: "PUBLIC" },
+  { href: "/about", label: "About", role: role.public },
+  { href: "/admin", label: "Dashboard", role: role.admin },
+  { href: "/sender", label: "Dashboard", role: role.sender },
+  { href: "/receiver", label: "Dashboard", role: role.receiver },
 ];
 
 export default function Navbar() {
-  const { data, isLoading } = useUserInfoQuery({});
+  const { data, isLoading } = useUserInfoQuery();
   const [logout] = useLogOutMutation();
   const dispatch = useAppDispatch();
+
+  console.log(data);
 
   const handleLogout = async () => {
     try {
       const res = await logout();
       console.log(res);
-      toast.success(res.data.message);
+      toast.success(res.data?.message);
       dispatch(authApi.util.resetApiState());
     } catch (error: any) {
       console.log(error);
       toast.error(error?.data?.message || "Something went wrong");
     }
   };
+  
 
   console.log(data);
   return (
@@ -88,18 +95,31 @@ export default function Navbar() {
             <PopoverContent align="start" className="w-36 p-1 md:hidden">
               <NavigationMenu className="max-w-none *:w-full">
                 <NavigationMenuList className="flex-col items-start gap-0 md:gap-2">
+                  {/* Nav === Mobile */}
                   {navigationLinks.map((link, index) => (
-                    <NavigationMenuItem key={index} className="w-full">
-                      <NavLink to={link.href} className="py-1.5">
-                        {link.label}
-                      </NavLink>
-                    </NavigationMenuItem>
+                    <>
+                      {link.role === role.public && (
+                        <NavigationMenuItem key={index} className="w-full">
+                          <NavigationMenuLink className="py-1.5">
+                            <Link to={link.href}>{link.label}</Link>
+                          </NavigationMenuLink>
+                        </NavigationMenuItem>
+                      )}
+
+                      {link.role === data?.role && (
+                        <NavigationMenuItem key={index} className="w-full">
+                          <NavigationMenuLink className="py-1.5">
+                            <Link to={link.href}>{link.label}</Link>
+                          </NavigationMenuLink>
+                        </NavigationMenuItem>
+                      )}
+                    </>
                   ))}
                 </NavigationMenuList>
               </NavigationMenu>
             </PopoverContent>
           </Popover>
-          {/* Main nav */}
+          {/* Main nav === Desktop */}
           <div className="flex items-center gap-6">
             <Link to="/" className="text-primary hover:text-primary/90">
               <Logo />
@@ -107,16 +127,25 @@ export default function Navbar() {
             {/* Navigation menu */}
             <NavigationMenu className="max-md:hidden">
               <NavigationMenuList className="gap-2">
-                {navigationLinks.map((link, index) => (
-                  <NavigationMenuItem key={index}>
-                    <NavLink
-                      to={link.href}
-                      className="py-1.5 font-medium text-muted-foreground hover:text-primary"
-                    >
-                      {link.label}
-                    </NavLink>
-                  </NavigationMenuItem>
-                ))}
+                  {navigationLinks.map((link, index) => (
+                    <>
+                      {link.role === role.public && (
+                        <NavigationMenuItem key={index} className="w-full">
+                          <NavigationMenuLink className="py-1.5">
+                            <NavLink to={link.href}>{link.label}</NavLink>
+                          </NavigationMenuLink>
+                        </NavigationMenuItem>
+                      )}
+
+                      {link.role === data?.role && (
+                        <NavigationMenuItem key={index} className="w-full">
+                          <NavigationMenuLink className="py-1.5">
+                            <Link to={link.href}>{link.label}</Link>
+                          </NavigationMenuLink>
+                        </NavigationMenuItem>
+                      )}
+                    </>
+                  ))}
               </NavigationMenuList>
             </NavigationMenu>
           </div>
