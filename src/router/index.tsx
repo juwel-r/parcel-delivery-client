@@ -1,17 +1,18 @@
 import App from "@/App";
 import DashboardLayout from "@/components/Layouts/DashboardLayout";
 import { role } from "@/constant/role";
-import About from "@/pages/About";
-import Login from "@/pages/Login";
-import Registration from "@/pages/Registration";
-import Unauthorize from "@/pages/Unauthorize";
+import About from "@/pages/Public/About";
+import Login from "@/pages/Public/Login";
+import Registration from "@/pages/Public/Registration";
+import Unauthorize from "@/pages/Public/Unauthorize";
 import { checkAuthorization } from "@/utils/checkAuth";
 import { generateRoutes } from "@/utils/generateRoutes";
-import { createBrowserRouter,Navigate } from "react-router";
+import { createBrowserRouter, Navigate } from "react-router";
 import { adminSidebar } from "./adminSidebar";
-import type { TRole } from "@/types";
 import { senderSidebar } from "./senderSidebar";
 import { receiverSidebar } from "./receiverSidebar";
+import Contact from "@/pages/Public/Contact";
+import type { TRole } from "@/types";
 
 export const router = createBrowserRouter([
   {
@@ -22,9 +23,13 @@ export const router = createBrowserRouter([
         Component: About,
         path: "about",
       },
+      {
+        Component: Contact,
+        path: "contact",
+      },
     ],
   },
-    {
+  {
     Component: checkAuthorization(DashboardLayout, role.admin as TRole),
     path: "/admin",
     children: [
@@ -37,7 +42,7 @@ export const router = createBrowserRouter([
     Component: checkAuthorization(DashboardLayout, role.sender as TRole),
     path: "/sender",
     children: [
-      { index: true, element: <Navigate to="/sender/send-parcel" /> },
+      { index: true, element: <Navigate to="/sender/create-parcel" /> },
       ...generateRoutes(senderSidebar),
     ],
   },

@@ -33,12 +33,13 @@ import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router";
 import { useRegisterMutation } from "@/redux/features/auth/authApi";
 import { toast } from "sonner";
+import { Spinner } from "@/components/ui/spinner";
 
 export function RegistrationForm({
   className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) {
-  const [register] = useRegisterMutation();
+  const [register, { isLoading }] = useRegisterMutation();
   const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof registerSchema>>({
@@ -175,8 +176,8 @@ export function RegistrationForm({
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-1/3 mx-auto">
-                Register
+              <Button disabled={isLoading} type="submit" className="w-1/3 ">
+                Register {isLoading && <Spinner className="size-4"></Spinner>}
               </Button>
               <FormDescription className="">
                 Already have an account?&nbsp;

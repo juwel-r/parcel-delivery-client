@@ -23,12 +23,12 @@ import { toast } from "sonner";
 import { role } from "@/constant/role";
 
 const navigationLinks = [
-  { href: "/", label: "Home", role: "PUBLIC" },
-  { href: "/tours", label: "Tours", role: "PUBLIC" },
-  { href: "/about", label: "About", role: role.public },
+  { href: "/", label: "Home", role: role.public },
   { href: "/admin", label: "Dashboard", role: role.admin },
   { href: "/sender", label: "Dashboard", role: role.sender },
   { href: "/receiver", label: "Dashboard", role: role.receiver },
+  { href: "/about", label: "About", role: role.public },
+  { href: "/contact", label: "Contact", role: role.public },
 ];
 
 export default function Navbar() {
@@ -49,7 +49,6 @@ export default function Navbar() {
       toast.error(error?.data?.message || "Something went wrong");
     }
   };
-  
 
   console.log(data);
   return (
@@ -127,25 +126,25 @@ export default function Navbar() {
             {/* Navigation menu */}
             <NavigationMenu className="max-md:hidden">
               <NavigationMenuList className="gap-2">
-                  {navigationLinks.map((link, index) => (
-                    <>
-                      {link.role === role.public && (
-                        <NavigationMenuItem key={index} className="w-full">
-                          <NavigationMenuLink className="py-1.5">
-                            <NavLink to={link.href}>{link.label}</NavLink>
-                          </NavigationMenuLink>
-                        </NavigationMenuItem>
-                      )}
+                {navigationLinks.map((link, index) => (
+                  <>
+                    {link.role === role.public && (
+                      <NavigationMenuItem key={index} className="w-full">
+                        <NavigationMenuLink className="py-1.5">
+                          <NavLink to={link.href}>{link.label}</NavLink>
+                        </NavigationMenuLink>
+                      </NavigationMenuItem>
+                    )}
 
-                      {link.role === data?.role && (
-                        <NavigationMenuItem key={index} className="w-full">
-                          <NavigationMenuLink className="py-1.5">
-                            <Link to={link.href}>{link.label}</Link>
-                          </NavigationMenuLink>
-                        </NavigationMenuItem>
-                      )}
-                    </>
-                  ))}
+                    {link.role === data?.role && (
+                      <NavigationMenuItem key={index} className="w-full">
+                        <NavigationMenuLink className="py-1.5">
+                          <Link to={link.href}>{link.label}</Link>
+                        </NavigationMenuLink>
+                      </NavigationMenuItem>
+                    )}
+                  </>
+                ))}
               </NavigationMenuList>
             </NavigationMenu>
           </div>

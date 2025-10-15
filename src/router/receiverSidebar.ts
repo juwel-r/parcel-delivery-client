@@ -1,6 +1,5 @@
-import ReceiveParcel from "@/pages/Receiver/ReceiveParcel";
+import IncomingParcels from "@/pages/Receiver/IncomingParcels";
 import type { ISidebarItem } from "@/types";
-
 
 export const receiverSidebar: ISidebarItem[] = [
   {
@@ -9,9 +8,8 @@ export const receiverSidebar: ISidebarItem[] = [
       {
         title: "Receive Parcel",
         url: "/receiver/receive-parcel",
-        component: ReceiveParcel,
+        component: IncomingParcels,
       },
     ],
   },
-
 ];

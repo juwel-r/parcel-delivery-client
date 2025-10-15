@@ -26,12 +26,13 @@ import { Link, useLocation, useNavigate } from "react-router";
 import { authApi, useLoginMutation } from "@/redux/features/auth/authApi";
 import { toast } from "sonner";
 import { useAppDispatch } from "@/redux/hook";
+import { Spinner } from "@/components/ui/spinner";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-  const [login] = useLoginMutation();
+  const [login, {isLoading}] = useLoginMutation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
@@ -57,7 +58,7 @@ export function LoginForm({
       navigate(location.state || "/");
     } catch (error: any) {
       console.log(error);
-      toast.error(error.data.message || error.data);
+      toast.error(error.data.message || "Something went wrong.");
     }
   };
 
@@ -112,8 +113,8 @@ export function LoginForm({
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-1/3 mx-auto">
-                Login
+              <Button disabled={isLoading} type="submit" className="w-1/3 ">
+                Login {isLoading && <Spinner className="size-4"></Spinner>}
               </Button>
               <FormDescription className="">
                 Don&apos;t have an account?{" "}

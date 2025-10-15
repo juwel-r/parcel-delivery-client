@@ -1,6 +1,8 @@
 import type { ComponentType } from "react";
 
-export type { IUser, IUserRegister, AuthProvider } from "./auth/auth.type";
+export type { IUserRegister } from "./auth/auth.type";
+export type { IUser, TRole, AuthProvider } from "./user/user.types";
+export type { IParcel, IStatusLog, TParcelStatus } from "./parcel/parcel.types";
 
 export interface IResponse<T> {
   statusCode: number;
@@ -26,6 +28,3 @@ export interface ISidebarItem {
     component: ComponentType;
   }[];
 }
-
-
-export type TRole =  "ADMIN" | "SENDER" | "RECEIVER";
