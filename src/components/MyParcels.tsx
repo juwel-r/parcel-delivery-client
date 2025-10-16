@@ -16,15 +16,13 @@ import { UpdateStatusModal } from "@/components/modules/Sender/UpdateStatusModal
 import type { IParcel } from "@/types";
 import Parcel from "@/assets/icons/Parcel";
 import Document from "@/assets/icons/Document";
-import ParcelTracker from "@/components/ParcelTracker";
-import { Link } from "react-router";
 
 export default function MyParcels() {
   const id = useId();
 
   const { data: myParcels, isLoading } = useGetMyParcelQuery();
 
-  console.log({myParcels});
+  console.log(myParcels);
 
   return (
     <>
@@ -80,7 +78,7 @@ export default function MyParcels() {
                   </div>
 
                   <div className="col-span-2 lg:col-span-2 my-auto">
-                   <Button><Link to={`/tracking/${item.trackingId}`}>Tracking History</Link></Button>
+                    <UpdateStatusModal item={item} />
                   </div>
 
                   <div className="col-span-2 my-auto w-full">

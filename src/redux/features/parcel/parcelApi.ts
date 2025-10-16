@@ -25,7 +25,14 @@ const parcelApi = baseApi.injectEndpoints({
         data
       }),
     }),
+
+    parcelTracking: builder.query<IResponse<IStatusLog>,{trackingId:string}>({
+      query: (trackingId) => ({
+        url: `/parcel/${trackingId}/history`,
+        method: "GET",
+      }),
+    }),
   }),
 });
 
-export const { useCreateParcelMutation, useGetMyParcelQuery, useUpdateStatusMutation } = parcelApi;
+export const { useCreateParcelMutation, useGetMyParcelQuery, useUpdateStatusMutation, useParcelTrackingQuery } = parcelApi;

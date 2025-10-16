@@ -13,6 +13,7 @@ import { senderSidebar } from "./senderSidebar";
 import { receiverSidebar } from "./receiverSidebar";
 import Contact from "@/pages/Public/Contact";
 import type { TRole } from "@/types";
+import ParcelTracker from "@/components/ParcelTracker";
 
 export const router = createBrowserRouter([
   {
@@ -27,6 +28,10 @@ export const router = createBrowserRouter([
         Component: Contact,
         path: "contact",
       },
+        {
+    Component: ParcelTracker,
+    path: "tracking/:trackingId",
+  },
     ],
   },
   {
@@ -67,4 +72,5 @@ export const router = createBrowserRouter([
     Component: Unauthorize,
     path: "/unauthorize",
   },
+
 ]);
