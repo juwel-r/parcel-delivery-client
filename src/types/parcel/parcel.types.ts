@@ -1,7 +1,9 @@
+import type { IUser } from "../user/user.types"
+
 export interface IParcel {
   trackingId: string
   sender: string
-  receiver: string
+  receiver: string | Partial<IUser>
   pickupAddress: string
   deliveryAddress: string
   type: string
@@ -21,8 +23,8 @@ export interface IStatusLog {
   status: TParcelStatus;
   location: string;
   notes?: string;
-  updatedBy: string;
-  timestamp: Date;
+  updatedBy?: string;
+  timestamp: Date | string;
 }
 
 export type TParcelStatus ="REQUESTED"|"APPROVED"|"DISPATCHED"|"IN_TRANSIT"|"DELIVERED"|"CANCELLED"

@@ -28,3 +28,9 @@ export const createParcelSchema = z.object({
   deliveryAddress: z.string({ error: "Delivery address is required." }).min(1,{error:"Delivery address is required"}),
   deliveryDate: z.date({ error: "Delivery date is required." }).min(1,{error:"Delivery date is required"}),
 });
+
+export const updateStatusSchema = z.object({
+  status: z.string({ error: "Please select updatable status" }),
+  location: z.string({ error: "Please give current location of parcel" }),
+  notes: z.string().optional(),
+});

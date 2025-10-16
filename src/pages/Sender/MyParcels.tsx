@@ -3,130 +3,101 @@ import { useId } from "react";
 import { useGetMyParcelQuery } from "@/redux/features/parcel/parcelApi";
 import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+
 import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { format } from "date-fns";
+import { UpdateStatusModal } from "@/components/modules/Sender/UpdateStatusModal";
+import type { IParcel } from "@/types";
+import Parcel from "@/assets/icons/Parcel";
+import Document from "@/assets/icons/Document";
 
 export default function MyParcels() {
   const id = useId();
 
   const { data: myParcels, isLoading } = useGetMyParcelQuery();
 
-console.log(myParcels);
+  console.log(myParcels);
+
   return (
     <>
-      <Card>
+      <Card className="w-full md:max-w-3/4 mx-auto">
         <CardHeader>
           <CardTitle className="text-center text-2xl">My All Parcels</CardTitle>
           <CardDescription>Card Description</CardDescription>
-          <CardAction>Card Action</CardAction>
         </CardHeader>
-        <CardContent>
-
-   {
-            !isLoading && myParcels?.data.length && myParcels.data.map(item=>(          <div className="relative flex w-full items-start gap-2 rounded-md border border-input p-4 shadow-xs outline-none has-data-[state=checked]:border-primary/50">
-            <Select>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Select a fruit" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectLabel>Fruits</SelectLabel>
-
-                  <SelectItem value="apple">Apple</SelectItem>
-                  <SelectItem value="apple2">Apple2</SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-            <div className="flex grow items-center gap-3">
-              <svg
-                className="shrink-0"
-                xmlns="http://www.w3.org/2000/svg"
-                width={32}
-                height={32}
-                aria-hidden="true"
+        <CardContent className="space-y-5 p-4 w-full">
+          {!isLoading &&
+            myParcels?.data.length &&
+            myParcels.data.map((item:IParcel) => (
+              <div
+                key={item._id}
+                className="relative flex w-full items-start gap-2 rounded-md border border-input p-4 shadow-xs outline-none has-data-[state=checked]:border-primary/50"
               >
-                <circle cx="16" cy="16" r="16" fill="#121212" />
-                <g clipPath="url(#sb-a)">
-                  <path
-                    fill="url(#sb-b)"
-                    d="M17.63 25.52c-.506.637-1.533.287-1.545-.526l-.178-11.903h8.003c1.45 0 2.259 1.674 1.357 2.81l-7.637 9.618Z"
-                  />
-                  <path
-                    fill="url(#sb-c)"
-                    fillOpacity=".2"
-                    d="M17.63 25.52c-.506.637-1.533.287-1.545-.526l-.178-11.903h8.003c1.45 0 2.259 1.674 1.357 2.81l-7.637 9.618Z"
-                  />
-                  <path
-                    fill="#3ECF8E"
-                    d="M14.375 6.367c.506-.638 1.532-.289 1.544.525l.078 11.903H8.094c-1.45 0-2.258-1.674-1.357-2.81l7.638-9.618Z"
-                  />
-                </g>
-                <defs>
-                  <linearGradient
-                    id="sb-b"
-                    x1="15.907"
-                    x2="23.02"
-                    y1="15.73"
-                    y2="18.713"
-                    gradientUnits="userSpaceOnUse"
-                  >
-                    <stop stopColor="#249361" />
-                    <stop offset="1" stopColor="#3ECF8E" />
-                  </linearGradient>
-                  <linearGradient
-                    id="sb-c"
-                    x1="12.753"
-                    x2="15.997"
-                    y1="11.412"
-                    y2="17.519"
-                    gradientUnits="userSpaceOnUse"
-                  >
-                    <stop />
-                    <stop offset="1" stopOpacity="0" />
-                  </linearGradient>
-                  <clipPath id="sb-a">
-                    <path fill="#fff" d="M6.354 6h19.292v20H6.354z" />
-                  </clipPath>
-                </defs>
-              </svg>
-              <div className="grid gap-2">
-                <Label htmlFor={id}>
-                  Label{" "}
-                  <span className="text-xs leading-[inherit] font-normal text-muted-foreground">
-                    (Sublabel)
-                  </span>
-                </Label>
-                <p
-                  id={`${id}-description`}
-                  className="text-xs text-muted-foreground"
-                >
-                  A short description goes here.
-                </p>
+                <div className="grid grid-cols-4 lg:grid-cols-12 md:gap-4 gap-2 gap-y-5 w-full">
+                  <div className="col-span-3 lg:col-span-4 flex grow items-center gap-5">
+
+                    {item.type=== "Parcel" ? <Parcel/> : <Document/>}
+
+                    <div className="grid gap-2 flex-1">
+                      <Label htmlFor={id} className="text-md">
+                        {item.type}
+                        <span className="text-xs leading-[inherit] font-normal text-muted-foreground bg-border px-1 rounded-xs">
+                          {item.currentStatus}
+                        </span>
+                      </Label>
+                      <p
+                        id={`${id}-description`}
+                        className="text-sm text-muted-foreground"
+                      >
+                        Delivery Fee: ৳{item.fee}
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        To: <strong>{(item.receiver as {name: string}).name}</strong>
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="col-span-4 text-muted-foreground text-sm space-y-1">
+                    <p>
+                      Booking Date:{format(new Date(item.createdAt), "dd/M/Y")}
+                    </p>
+                    <p>
+                      Delivery Date:
+                      {format(new Date(item.deliveryDate), "dd/M/Y")}
+                    </p>
+                    <p>
+                      Delivery Address:
+                      {item.deliveryAddress}
+                    </p>
+                  </div>
+
+                  <div className="col-span-2 lg:col-span-2 my-auto">
+                    <UpdateStatusModal item={item} />
+                  </div>
+
+                  <div className="col-span-2 my-auto w-full">
+                    <Button
+                      disabled={
+                        !(
+                          item.currentStatus === "REQUESTED" ||
+                          item.currentStatus === "APPROVED"
+                        )
+                      }
+                      className="bg-red-500 w-full"
+                    >
+                      Cancel Parcel
+                    </Button>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>))
-          }
-
-
+            ))}
         </CardContent>
-        <CardFooter>
-          <p>Card Footer</p>
-        </CardFooter>
       </Card>
     </>
   );
