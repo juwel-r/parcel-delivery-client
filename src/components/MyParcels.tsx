@@ -17,8 +17,10 @@ import type { IParcel } from "@/types";
 import Parcel from "@/assets/icons/Parcel";
 import Document from "@/assets/icons/Document";
 
+
 export default function MyParcels() {
   const id = useId();
+
 
   const { data: myParcels, isLoading } = useGetMyParcelQuery();
 

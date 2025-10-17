@@ -36,8 +36,6 @@ export default function Navbar() {
   const [logout] = useLogOutMutation();
   const dispatch = useAppDispatch();
 
-  console.log(data);
-
   const handleLogout = async () => {
     try {
       const res = await logout();
@@ -50,7 +48,6 @@ export default function Navbar() {
     }
   };
 
-  console.log(data);
   return (
     <header className="container mx-auto border-b">
       <div className="flex h-16 items-center justify-between gap-4">
@@ -127,10 +124,10 @@ export default function Navbar() {
             <NavigationMenu className="max-md:hidden">
               <NavigationMenuList className="gap-2">
                 {navigationLinks.map((link, index) => (
-                  <>
+                  <div key={index}>
                     {link.role === role.public && (
-                      <NavigationMenuItem key={index} className="w-full">
-                        <NavigationMenuLink className="py-1.5">
+                      <NavigationMenuItem className="w-full">
+                        <NavigationMenuLink asChild className="py-1.5">
                           <NavLink to={link.href}>{link.label}</NavLink>
                         </NavigationMenuLink>
                       </NavigationMenuItem>
@@ -138,12 +135,12 @@ export default function Navbar() {
 
                     {link.role === data?.role && (
                       <NavigationMenuItem key={index} className="w-full">
-                        <NavigationMenuLink className="py-1.5">
-                          <Link to={link.href}>{link.label}</Link>
+                        <NavigationMenuLink asChild className="py-1.5">
+                          <NavLink to={link.href}>{link.label}</NavLink>
                         </NavigationMenuLink>
                       </NavigationMenuItem>
                     )}
-                  </>
+                  </div>
                 ))}
               </NavigationMenuList>
             </NavigationMenu>

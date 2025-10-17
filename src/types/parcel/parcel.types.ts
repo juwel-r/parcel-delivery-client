@@ -1,22 +1,22 @@
-import type { IUser } from "../user/user.types"
+import type { IUser } from "../user/user.types";
 
 export interface IParcel {
-  trackingId: string
-  sender: string
-  receiver: string | Partial<IUser>
-  pickupAddress: string
-  deliveryAddress: string
-  type: string
-  details: string
-  weight: number
-  fee: number
-  deliveryDate: string
-  currentStatus: string
-  statusLog: IStatusLog[]
-  isBlock: boolean
-  _id: string
-  createdAt: string
-  updatedAt: string
+  trackingId: string;
+  sender: string | Partial<IUser>;
+  receiver: string | Partial<IUser>;
+  pickupAddress: string;
+  deliveryAddress: string;
+  type: string;
+  details: string;
+  weight: number;
+  fee: number;
+  deliveryDate: string;
+  currentStatus: TParcelStatus;
+  statusLog: IStatusLog[];
+  isBlock: boolean;
+  _id: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface IStatusLog {
@@ -27,4 +27,10 @@ export interface IStatusLog {
   timestamp: Date | string;
 }
 
-export type TParcelStatus ="REQUESTED"|"APPROVED"|"DISPATCHED"|"IN_TRANSIT"|"DELIVERED"|"CANCELLED"
+export type TParcelStatus =
+  | "REQUESTED"
+  | "APPROVED"
+  | "DISPATCHED"
+  | "IN_TRANSIT"
+  | "DELIVERED"
+  | "CANCELLED";

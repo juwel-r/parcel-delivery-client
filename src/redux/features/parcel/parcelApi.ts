@@ -18,21 +18,37 @@ const parcelApi = baseApi.injectEndpoints({
       }),
     }),
 
-    updateStatus: builder.mutation<IResponse<IParcel>,{parcelId:string, data:IStatusLog}>({
-      query: ({parcelId, data}) => ({
+    updateStatus: builder.mutation<
+      IResponse<IParcel>,
+      { parcelId: string; data: IStatusLog }
+    >({
+      query: ({ parcelId, data }) => ({
         url: `/parcel/${parcelId}/update`,
         method: "PATCH",
-        data
+        data,
       }),
     }),
 
-    parcelTracking: builder.query<IResponse<IStatusLog>,{trackingId:string}>({
+    parcelTracking: builder.query<IResponse<IParcel>, string>({
       query: (trackingId) => ({
         url: `/parcel/${trackingId}/history`,
         method: "GET",
       }),
     }),
+
+    cancelParcel: builder.mutation<IResponse<IParcel>, string>({
+      query: (parcelId) => ({
+        url: `/parcel/${parcelId}/cancel`,
+        method: "PATCH",
+      }),
+    }),
   }),
 });
 
-export const { useCreateParcelMutation, useGetMyParcelQuery, useUpdateStatusMutation, useParcelTrackingQuery } = parcelApi;
+export const {
+  useCreateParcelMutation,
+  useGetMyParcelQuery,
+  useUpdateStatusMutation,
+  useParcelTrackingQuery,
+  useCancelParcelMutation
+} = parcelApi;

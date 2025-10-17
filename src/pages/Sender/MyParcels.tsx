@@ -1,6 +1,9 @@
 import { useId } from "react";
 
-import { useGetMyParcelQuery } from "@/redux/features/parcel/parcelApi";
+import {
+  useCancelParcelMutation,
+  useGetMyParcelQuery,
+} from "@/redux/features/parcel/parcelApi";
 import {
   Card,
   CardContent,
@@ -12,19 +15,30 @@ import {
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
-import { UpdateStatusModal } from "@/components/modules/Sender/UpdateStatusModal";
 import type { IParcel } from "@/types";
 import Parcel from "@/assets/icons/Parcel";
 import Document from "@/assets/icons/Document";
-import ParcelTracker from "@/components/ParcelTracker";
 import { Link } from "react-router";
+import { toast } from "sonner";
 
 export default function MyParcels() {
   const id = useId();
 
   const { data: myParcels, isLoading } = useGetMyParcelQuery();
+  const [cancelParcel, { isloading }] = useCancelParcelMutation();
 
-  console.log({myParcels});
+  console.log({ myParcels });
+
+  const handleCancel = async (id: string) => {
+    try {
+      const res = await cancelParcel(id);
+      console.log(res);
+      toast.info(res.message);
+    } catch (error: any) {
+      console.log(error);
+      toast.error(error.data.message || "Something went wrong.");
+    }
+  };
 
   return (
     <>
@@ -36,15 +50,14 @@ export default function MyParcels() {
         <CardContent className="space-y-5 p-4 w-full">
           {!isLoading &&
             myParcels?.data.length &&
-            myParcels.data.map((item:IParcel) => (
+            myParcels.data.map((item: IParcel) => (
               <div
                 key={item._id}
                 className="relative flex w-full items-start gap-2 rounded-md border border-input p-4 shadow-xs outline-none has-data-[state=checked]:border-primary/50"
               >
                 <div className="grid grid-cols-4 lg:grid-cols-12 md:gap-4 gap-2 gap-y-5 w-full">
                   <div className="col-span-3 lg:col-span-4 flex grow items-center gap-5">
-
-                    {item.type=== "Parcel" ? <Parcel/> : <Document/>}
+                    {item.type === "Parcel" ? <Parcel /> : <Document />}
 
                     <div className="grid gap-2 flex-1">
                       <Label htmlFor={id} className="text-md">
@@ -60,7 +73,10 @@ export default function MyParcels() {
                         Delivery Fee: ৳{item.fee}
                       </p>
                       <p className="text-sm text-muted-foreground">
-                        To: <strong>{(item.receiver as {name: string}).name}</strong>
+                        To:{" "}
+                        <strong>
+                          {(item.receiver as { name: string }).name}
+                        </strong>
                       </p>
                     </div>
                   </div>
@@ -80,11 +96,14 @@ export default function MyParcels() {
                   </div>
 
                   <div className="col-span-2 lg:col-span-2 my-auto">
-                   <Button><Link to={`/tracking/${item.trackingId}`}>Tracking History</Link></Button>
+                    <Button>
+                      <Link to={`/tracking/${item.trackingId}`}>Tracking</Link>
+                    </Button>
                   </div>
 
                   <div className="col-span-2 my-auto w-full">
                     <Button
+                      onClick={handleCancel}
                       disabled={
                         !(
                           item.currentStatus === "REQUESTED" ||
@@ -93,7 +112,7 @@ export default function MyParcels() {
                       }
                       className="bg-red-500 w-full"
                     >
-                      Cancel Parcel
+                      Cancel
                     </Button>
                   </div>
                 </div>
