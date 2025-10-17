@@ -20,6 +20,9 @@ import Parcel from "@/assets/icons/Parcel";
 import Document from "@/assets/icons/Document";
 import { Link } from "react-router";
 import { toast } from "sonner";
+import { DeleteConfirmation } from "@/components/DeleteConfirmation";
+import { Spinner } from "@/components/ui/spinner";
+import { getErrorMessage } from "@/utils/getErrorMessage";
 
 export default function MyParcels() {
   const id = useId();
@@ -27,16 +30,16 @@ export default function MyParcels() {
   const { data: myParcels, isLoading } = useGetMyParcelQuery();
   const [cancelParcel, { isloading }] = useCancelParcelMutation();
 
-  console.log({ myParcels });
+  // console.log({ myParcels });
 
   const handleCancel = async (id: string) => {
     try {
-      const res = await cancelParcel(id);
+      const res = await cancelParcel(id).unwrap();
       console.log(res);
-      toast.info(res.message);
+      toast.info("Parcel has been cancelled.");
     } catch (error: any) {
       console.log(error);
-      toast.error(error.data.message || "Something went wrong.");
+      toast.error(getErrorMessage(error));
     }
   };
 
@@ -83,11 +86,11 @@ export default function MyParcels() {
 
                   <div className="col-span-4 text-muted-foreground text-sm space-y-1">
                     <p>
-                      Booking Date:{format(new Date(item.createdAt), "dd/M/Y")}
+                      Booking Date:{format(new Date(item.createdAt), "dd/M/y")}
                     </p>
                     <p>
                       Delivery Date:
-                      {format(new Date(item.deliveryDate), "dd/M/Y")}
+                      {format(new Date(item.deliveryDate), "dd/M/y")}
                     </p>
                     <p>
                       Delivery Address:
@@ -102,7 +105,7 @@ export default function MyParcels() {
                   </div>
 
                   <div className="col-span-2 my-auto w-full">
-                    <Button
+                    {/* <Button
                       onClick={handleCancel}
                       disabled={
                         !(
@@ -112,8 +115,32 @@ export default function MyParcels() {
                       }
                       className="bg-red-500 w-full"
                     >
-                      Cancel
-                    </Button>
+                      
+                    </Button> */}
+                    <DeleteConfirmation
+                      onConfirm={() => handleCancel(item._id)}
+                      content="to Cancel this parcel."
+                    >
+                      <Button
+                        disabled={
+                          !(
+                            item.currentStatus === "REQUESTED" ||
+                            item.currentStatus === "APPROVED"
+                          ) || isLoading
+                        }
+                        className={`${
+                          !(
+                            item.currentStatus === "REQUESTED" ||
+                            item.currentStatus === "APPROVED"
+                          ) || isLoading
+                            ? "bg-muted-foreground"
+                            : "bg-red-500"
+                        }`}
+                      >
+                        Cancel{" "}
+                        {isLoading && <Spinner className="size-4"></Spinner>}
+                      </Button>
+                    </DeleteConfirmation>
                   </div>
                 </div>
               </div>

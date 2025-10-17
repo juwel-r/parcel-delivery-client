@@ -9,6 +9,7 @@ const parcelApi = baseApi.injectEndpoints({
         method: "POST",
         data: parcelData,
       }),
+      invalidatesTags:["PARCEL"]
     }),
 
     getMyParcel: builder.query<IResponse<IParcel[]>, void>({
@@ -16,17 +17,16 @@ const parcelApi = baseApi.injectEndpoints({
         url: `/parcel/my-parcels`,
         method: "GET",
       }),
+      providesTags:["PARCEL"]
     }),
 
-    updateStatus: builder.mutation<
-      IResponse<IParcel>,
-      { parcelId: string; data: IStatusLog }
-    >({
+    updateStatus: builder.mutation<IResponse<IParcel>,{ parcelId: string; data: IStatusLog }>({
       query: ({ parcelId, data }) => ({
         url: `/parcel/${parcelId}/update`,
         method: "PATCH",
         data,
       }),
+      invalidatesTags:["PARCEL"]
     }),
 
     parcelTracking: builder.query<IResponse<IParcel>, string>({
@@ -34,6 +34,7 @@ const parcelApi = baseApi.injectEndpoints({
         url: `/parcel/${trackingId}/history`,
         method: "GET",
       }),
+      providesTags:["PARCEL"]
     }),
 
     cancelParcel: builder.mutation<IResponse<IParcel>, string>({
@@ -41,6 +42,7 @@ const parcelApi = baseApi.injectEndpoints({
         url: `/parcel/${parcelId}/cancel`,
         method: "PATCH",
       }),
+      invalidatesTags:["PARCEL"]
     }),
   }),
 });
