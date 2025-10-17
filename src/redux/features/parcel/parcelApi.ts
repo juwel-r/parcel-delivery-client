@@ -9,7 +9,7 @@ const parcelApi = baseApi.injectEndpoints({
         method: "POST",
         data: parcelData,
       }),
-      invalidatesTags:["PARCEL"]
+      invalidatesTags: ["PARCEL"],
     }),
 
     getMyParcel: builder.query<IResponse<IParcel[]>, void>({
@@ -17,16 +17,19 @@ const parcelApi = baseApi.injectEndpoints({
         url: `/parcel/my-parcels`,
         method: "GET",
       }),
-      providesTags:["PARCEL"]
+      providesTags: ["PARCEL"],
     }),
 
-    updateStatus: builder.mutation<IResponse<IParcel>,{ parcelId: string; data: IStatusLog }>({
+    updateStatus: builder.mutation<
+      IResponse<IParcel>,
+      { parcelId: string; data: IStatusLog }
+    >({
       query: ({ parcelId, data }) => ({
         url: `/parcel/${parcelId}/update`,
         method: "PATCH",
         data,
       }),
-      invalidatesTags:["PARCEL"]
+      invalidatesTags: ["PARCEL"],
     }),
 
     parcelTracking: builder.query<IResponse<IParcel>, string>({
@@ -34,7 +37,7 @@ const parcelApi = baseApi.injectEndpoints({
         url: `/parcel/${trackingId}/history`,
         method: "GET",
       }),
-      providesTags:["PARCEL"]
+      providesTags: ["PARCEL"],
     }),
 
     cancelParcel: builder.mutation<IResponse<IParcel>, string>({
@@ -42,7 +45,32 @@ const parcelApi = baseApi.injectEndpoints({
         url: `/parcel/${parcelId}/cancel`,
         method: "PATCH",
       }),
-      invalidatesTags:["PARCEL"]
+      invalidatesTags: ["PARCEL"],
+    }),
+
+    receiverUpcomingParcels: builder.query<IResponse<IParcel[]>, void>({
+      query: () => ({
+        url: "/parcel/receiver/upcoming-parcel",
+        method: "GET",
+      }),
+      // transformResponse:(res:IResponse<IParcel[]>)=>res.data,
+      providesTags: ["PARCEL"],
+    }),
+
+    confirmDelivery: builder.mutation<IResponse<IParcel[]>, string>({
+      query: (parcelId) => ({
+        url: `/parcel/${parcelId}/confirm-delivery`,
+        method: "PATCH",
+      }),
+      invalidatesTags: ["PARCEL"],
+    }),
+
+    deliveredParcel: builder.query<IResponse<IParcel[]>, void>({
+      query: () => ({
+        url: `parcel/receiver/delivered`,
+        method: "GET",
+      }),
+      providesTags: ["PARCEL"],
     }),
   }),
 });
@@ -52,5 +80,8 @@ export const {
   useGetMyParcelQuery,
   useUpdateStatusMutation,
   useParcelTrackingQuery,
-  useCancelParcelMutation
+  useCancelParcelMutation,
+  useReceiverUpcomingParcelsQuery,
+  useConfirmDeliveryMutation,
+  useDeliveredParcelQuery,
 } = parcelApi;

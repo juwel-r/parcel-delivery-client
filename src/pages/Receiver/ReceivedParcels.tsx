@@ -1,9 +1,6 @@
 import { useId } from "react";
 
-import {
-  useConfirmDeliveryMutation,
-  useReceiverUpcomingParcelsQuery,
-} from "@/redux/features/parcel/parcelApi";
+import { useDeliveredParcelQuery } from "@/redux/features/parcel/parcelApi";
 import {
   Card,
   CardContent,
@@ -18,43 +15,38 @@ import type { IParcel } from "@/types";
 import Parcel from "@/assets/icons/Parcel";
 import Document from "@/assets/icons/Document";
 import { Link } from "react-router";
-import { toast } from "sonner";
-import { DeleteConfirmation } from "@/components/DeleteConfirmation";
-import { Spinner } from "@/components/ui/spinner";
-import { getErrorMessage } from "@/utils/getErrorMessage";
 import { ParcelCardSkeleton } from "@/components/modules/Skeleton/ParcelListSkeleton";
-import { CheckCheck, History } from "lucide-react";
+import { History } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-export default function IncomingParcels() {
+export default function ReceivedParcels() {
   const id = useId();
 
-  const { data: myParcels, isLoading } = useReceiverUpcomingParcelsQuery();
-  const [confirmDelivery, { isLoading: isLoadingDelivery }] =
-    useConfirmDeliveryMutation();
+  const { data: myParcels, isLoading } = useDeliveredParcelQuery();
 
-  console.log({ myParcels });
+  const refinedParcels = myParcels?.data.map((parcel) => {
+    const deliveredLog = parcel.statusLog.find(
+      (log) => log.status.toLowerCase().trim() === "delivered"
+    );
+    return {
+      ...parcel,
+      deliveryConfirmed: deliveredLog ? deliveredLog.timestamp : null,
+    };
+  });
 
-  const handleConfirmDelivery = async (id: string) => {
-    try {
-      const res = await confirmDelivery(id).unwrap();
-      console.log(res);
-      toast.info("Parcel has been confirmed as Delivery.");
-    } catch (error: any) {
-      console.log(error);
-      toast.error(getErrorMessage(error));
-    }
-  };
+  console.log(refinedParcels);
 
   return (
     <>
       <Card className="w-full md:max-w-3/4 mx-auto">
         <CardHeader>
-          <CardTitle className="text-center text-2xl">Incoming Parcels</CardTitle>
+          <CardTitle className="text-center text-2xl">
+            All Delivered Parcels
+          </CardTitle>
           <CardDescription className="text-center">
             All parcel of you are shown in below. You can search and filter them
             as need.
@@ -116,6 +108,10 @@ export default function IncomingParcels() {
                         {item.deliveryAddress}
                       </p>
                     </div>
+                    <div className="text-muted-foreground text-sm space-y-1">
+                      <p>Confirmed: </p>{" "}
+                      <p> {format(new Date(item.updatedAt), "dd/M/y HH:mm a")}</p>
+                    </div>
 
                     <div className="col-span-2 lg:col-span-2 flex items-center justify-center">
                       <Link to={`/tracking/${item.trackingId}`}>
@@ -126,40 +122,10 @@ export default function IncomingParcels() {
                             </div>
                           </TooltipTrigger>
                           <TooltipContent>
-                            <p>View Status Logs</p>
+                            <p>View Delivery History</p>
                           </TooltipContent>
                         </Tooltip>
                       </Link>
-                    </div>
-
-                    <div className="col-span-2 flex items-center justify-center">
-                      <DeleteConfirmation
-                        onConfirm={() => handleConfirmDelivery(item._id)}
-                        content="Confirm Delivery?"
-                      >
-                        <button
-                          disabled={item.currentStatus !== "IN_TRANSIT"}
-                          className={` ${
-                            item.currentStatus !== "IN_TRANSIT" || isLoading
-                              ? "text-muted-foreground cursor-not-allowed"
-                              : "text-green-500"
-                          }`}
-                        >
-                          <Tooltip>
-                            <TooltipTrigger asChild type="button">
-                              <CheckCheck size={44} strokeWidth={2.75} />
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              <p>{`${
-                                item.currentStatus === "IN_TRANSIT"
-                                  ? "Confirm delivery."
-                                  : `This ${item.type} is now on ${item.currentStatus}. Confirm after in transit.`
-                              }`}</p>
-                            </TooltipContent>
-                          </Tooltip>
-                          {isLoadingDelivery && <Spinner className="size-4" />}
-                        </button>
-                      </DeleteConfirmation>
                     </div>
                   </div>
                 </div>

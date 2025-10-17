@@ -55,7 +55,7 @@ export const router = createBrowserRouter([
     Component: checkAuthorization(DashboardLayout, role.receiver as TRole),
     path: "/receiver",
     children: [
-      { index: true, element: <Navigate to="/receiver/receive-parcel" /> },
+      { index: true, element: <Navigate to="/receiver/incoming-parcel" /> },
       ...generateRoutes(receiverSidebar),
     ],
   },

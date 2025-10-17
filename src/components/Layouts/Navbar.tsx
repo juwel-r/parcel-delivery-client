@@ -96,7 +96,7 @@ export default function Navbar() {
                     <>
                       {link.role === role.public && (
                         <NavigationMenuItem key={index} className="w-full">
-                          <NavigationMenuLink className="py-1.5">
+                          <NavigationMenuLink asChild className="py-1.5">
                             <Link to={link.href}>{link.label}</Link>
                           </NavigationMenuLink>
                         </NavigationMenuItem>
@@ -104,7 +104,7 @@ export default function Navbar() {
 
                       {link.role === data?.role && (
                         <NavigationMenuItem key={index} className="w-full">
-                          <NavigationMenuLink className="py-1.5">
+                          <NavigationMenuLink asChild className="py-1.5">
                             <Link to={link.href}>{link.label}</Link>
                           </NavigationMenuLink>
                         </NavigationMenuItem>

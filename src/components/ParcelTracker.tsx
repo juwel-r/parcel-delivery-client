@@ -60,12 +60,10 @@ export default function ParcelTracker() {
   const activeStep = getStepNumber(parcel.currentStatus);
 
   return (
-    <div className="max-w-3xl mx-auto mt-10 p-6  rounded-2xl shadow-sm border space-y-6">
+    <div className="max-w-3xl mx-auto mt-10 p-6  rounded-2xl shadow-sm space-y-6">
       <div className="text-center space-y-1">
         <h2 className="text-xl font-semibold text-primary">Parcel Tracking</h2>
-        <p className="text-sm text-muted-foreground">
-          Tracking ID: <span className="font-medium">{parcel.trackingId}</span>
-        </p>
+
       </div>
 
       <Card className="shadow-lg border-t-4 border-primary">
@@ -258,7 +256,7 @@ export default function ParcelTracker() {
             const isCurrent = index === activeStep - 1;
             const isUpcoming = index > activeStep - 1;
 
-            const stepData = parcel.statusLog.find((s) => s.status === status);
+            const stepData = parcel.statusLog.find((s:IStatusLog) => s.status === status);
 
             return (
               <StepperItem

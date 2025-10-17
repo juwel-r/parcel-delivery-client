@@ -1,8 +1,8 @@
 import { useId } from "react";
 
 import {
-  useConfirmDeliveryMutation,
-  useReceiverUpcomingParcelsQuery,
+  useCancelParcelMutation,
+  useGetMyParcelQuery,
 } from "@/redux/features/parcel/parcelApi";
 import {
   Card,
@@ -23,27 +23,27 @@ import { DeleteConfirmation } from "@/components/DeleteConfirmation";
 import { Spinner } from "@/components/ui/spinner";
 import { getErrorMessage } from "@/utils/getErrorMessage";
 import { ParcelCardSkeleton } from "@/components/modules/Skeleton/ParcelListSkeleton";
-import { CheckCheck, History } from "lucide-react";
+import { History, X } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-export default function IncomingParcels() {
+export default function SenderParcels() {
   const id = useId();
 
-  const { data: myParcels, isLoading } = useReceiverUpcomingParcelsQuery();
-  const [confirmDelivery, { isLoading: isLoadingDelivery }] =
-    useConfirmDeliveryMutation();
+  const { data: myParcels, isLoading } = useGetMyParcelQuery();
+  const [cancelParcel, { isLoading: isLoadingCancel }] =
+    useCancelParcelMutation();
 
-  console.log({ myParcels });
+  // console.log({ myParcels });
 
-  const handleConfirmDelivery = async (id: string) => {
+  const handleCancel = async (id: string) => {
     try {
-      const res = await confirmDelivery(id).unwrap();
+      const res = await cancelParcel(id).unwrap();
       console.log(res);
-      toast.info("Parcel has been confirmed as Delivery.");
+      toast.info("Parcel has been cancelled.");
     } catch (error: any) {
       console.log(error);
       toast.error(getErrorMessage(error));
@@ -54,7 +54,7 @@ export default function IncomingParcels() {
     <>
       <Card className="w-full md:max-w-3/4 mx-auto">
         <CardHeader>
-          <CardTitle className="text-center text-2xl">Incoming Parcels</CardTitle>
+          <CardTitle className="text-center text-2xl">Sender Parcels</CardTitle>
           <CardDescription className="text-center">
             All parcel of you are shown in below. You can search and filter them
             as need.
@@ -77,13 +77,13 @@ export default function IncomingParcels() {
                   className="relative flex w-full items-start gap-2 rounded-md border border-input p-4 shadow-xs outline-none has-data-[state=checked]:border-primary/50"
                 >
                   <div className="grid grid-cols-4 lg:grid-cols-12 md:gap-4 gap-2 gap-y-5 w-full">
-                    <div className="col-span-3 lg:col-span-4 flex grow items-center gap-x-5">
+                    <div className="col-span-3 lg:col-span-4 flex grow items-center gap-5">
                       {item.type === "Parcel" ? <Parcel /> : <Document />}
 
-                      <div className="grid gap-x-2 gap-y-1 flex-1">
+                      <div className="grid gap-2 flex-1">
                         <Label htmlFor={id} className="text-md">
                           {item.type}
-                          <span className="text-xs leading-[inherit] font-normal px-1 rounded-xs bg-primary/70 text-white/90">
+                          <span className="text-xs leading-[inherit] font-normal text-muted-foreground bg-border px-1 rounded-xs">
                             {item.currentStatus}
                           </span>
                         </Label>
@@ -94,9 +94,9 @@ export default function IncomingParcels() {
                           Delivery Fee: ৳{item.fee}
                         </p>
                         <p className="text-sm text-muted-foreground">
-                          From:{" "}
+                          To:{" "}
                           <strong>
-                            {(item.sender as { name: string }).name}
+                            {(item.receiver as { name: string }).name}
                           </strong>
                         </p>
                       </div>
@@ -134,30 +134,41 @@ export default function IncomingParcels() {
 
                     <div className="col-span-2 flex items-center justify-center">
                       <DeleteConfirmation
-                        onConfirm={() => handleConfirmDelivery(item._id)}
-                        content="Confirm Delivery?"
+                        onConfirm={() => handleCancel(item._id)}
+                        content="Cancel this parcel."
                       >
-                        <button
-                          disabled={item.currentStatus !== "IN_TRANSIT"}
+                        <button 
+                          disabled={
+                            !(
+                              item.currentStatus === "REQUESTED" ||
+                              item.currentStatus === "APPROVED"
+                            ) || isLoading
+                          }
                           className={` ${
-                            item.currentStatus !== "IN_TRANSIT" || isLoading
+                            !(
+                              item.currentStatus === "REQUESTED" ||
+                              item.currentStatus === "APPROVED"
+                            ) || isLoading
                               ? "text-muted-foreground cursor-not-allowed"
-                              : "text-green-500"
+                              : "text-red-500"
                           }`}
                         >
                           <Tooltip>
                             <TooltipTrigger asChild type="button">
-                              <CheckCheck size={44} strokeWidth={2.75} />
+                              <X size={44} strokeWidth={2.75} />
                             </TooltipTrigger>
                             <TooltipContent>
-                              <p>{`${
-                                item.currentStatus === "IN_TRANSIT"
-                                  ? "Confirm delivery."
-                                  : `This ${item.type} is now on ${item.currentStatus}. Confirm after in transit.`
-                              }`}</p>
+                              <p>
+                                {!(
+                                  item.currentStatus === "REQUESTED" ||
+                                  item.currentStatus === "APPROVED"
+                                )
+                                  ? `This ${item.type} is already ${item.currentStatus}. so, you can not cancel this ${item.type}`
+                                  : "Cancel this parcel."}
+                              </p>
                             </TooltipContent>
                           </Tooltip>
-                          {isLoadingDelivery && <Spinner className="size-4" />}
+                          {isLoadingCancel && <Spinner className="size-4" />}
                         </button>
                       </DeleteConfirmation>
                     </div>

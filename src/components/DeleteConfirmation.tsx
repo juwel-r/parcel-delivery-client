@@ -29,8 +29,7 @@ export function DeleteConfirmation({ children, onConfirm, content }: IProps) {
         <AlertDialogHeader>
           <AlertDialogTitle>Are you sure to {content}</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete or cancel your data
-            from our servers.
+            
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

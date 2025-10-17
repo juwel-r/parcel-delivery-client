@@ -1,6 +1,6 @@
 
 import { CreateParcel } from "@/pages/Sender/CreateParcel";
-import MyParcels from "@/pages/Sender/MyParcels";
+import SenderParcels from "@/pages/Sender/SenderParcels";
 import type { ISidebarItem } from "@/types";
 
 export const senderSidebar: ISidebarItem[] = [
@@ -15,7 +15,7 @@ export const senderSidebar: ISidebarItem[] = [
       {
         title: "My Parcels",
         url: "/sender/my-parcels",
-        component: MyParcels,
+        component: SenderParcels,
       },
     ],
   },

@@ -17,6 +17,7 @@ export interface IParcel {
   _id: string;
   createdAt: string;
   updatedAt: string;
+  deliveryConfirmed:Date | string
 }
 
 export interface IStatusLog {
