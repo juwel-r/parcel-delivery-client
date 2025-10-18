@@ -30,10 +30,11 @@ import {
 } from "@/components/ui/select";
 import type { IParcel } from "@/types";
 import { useUpdateStatusMutation } from "@/redux/features/parcel/parcelApi";
-import { formatISO } from "date-fns";
 import type z from "zod";
 import { updateStatusSchema } from "@/utils/zodSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { getErrorMessage } from "@/utils/getErrorMessage";
+import { DialogDescription } from "@radix-ui/react-dialog";
 
 interface IProps {
   item: IParcel;
@@ -58,22 +59,16 @@ export function UpdateStatusModal({ item }: IProps) {
   });
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    const payload = {
-      ...data,
-      timestamp: formatISO(new Date()),
-    };
+
 
     try {
-      const result = await updateStatus({
-        parcelId: item._id,
-        data: payload,
-      }).unwrap();
+      const result = await updateStatus({  parcelId: item._id,  data,}).unwrap();
 
       toast.success(result.message);
       form.reset();
       setIsOpen(false);
     } catch (error: any) {
-      toast.error(error.data.message || error.data);
+      toast.error(getErrorMessage(error));
       console.log(error);
     }
   };
@@ -81,13 +76,14 @@ export function UpdateStatusModal({ item }: IProps) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant={"outline"} className="w-full">
+        <Button variant={"outline"} size={"sm"} className="text-xs">
           Update
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Update Parcel Status</DialogTitle>
+          <DialogDescription><span className="font-thin text-muted-foreground">{item.type} of </span> {(item.sender as { name: string }).name}</DialogDescription>
         </DialogHeader>
 
         <Form {...form}>

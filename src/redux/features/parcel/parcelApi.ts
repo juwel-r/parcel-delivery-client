@@ -20,10 +20,7 @@ const parcelApi = baseApi.injectEndpoints({
       providesTags: ["PARCEL"],
     }),
 
-    updateStatus: builder.mutation<
-      IResponse<IParcel>,
-      { parcelId: string; data: IStatusLog }
-    >({
+    updateStatus: builder.mutation<  IResponse<IParcel>,  { parcelId: string; data: Partial<IStatusLog> }>({
       query: ({ parcelId, data }) => ({
         url: `/parcel/${parcelId}/update`,
         method: "PATCH",
@@ -72,6 +69,23 @@ const parcelApi = baseApi.injectEndpoints({
       }),
       providesTags: ["PARCEL"],
     }),
+
+    getAllParcels: builder.query<IResponse<IParcel[]>, unknown>({
+      query: (params) => ({
+        url: "/parcel",
+        method: "GET",
+        params,
+      }),
+      providesTags: ["PARCEL"],
+    }),
+
+    updateParcelStatus:builder.mutation<IResponse<null>, string>({
+      query:(parcelId)=>({
+        url:`/parcel/${parcelId}/block`,
+        method:"PATCH"
+      }),
+      invalidatesTags:["PARCEL"]
+    })
   }),
 });
 
@@ -84,4 +98,6 @@ export const {
   useReceiverUpcomingParcelsQuery,
   useConfirmDeliveryMutation,
   useDeliveredParcelQuery,
+  useGetAllParcelsQuery,
+  useUpdateParcelStatusMutation
 } = parcelApi;

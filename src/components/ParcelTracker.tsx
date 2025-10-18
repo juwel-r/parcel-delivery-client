@@ -9,17 +9,19 @@ import {
   StepperTitle,
   StepperTrigger,
 } from "@/components/ui/stepper";
-import { Loader2, MapPin, CheckCircle } from "lucide-react";
+import { Loader2, MapPin, CheckCircle, BookmarkCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useParams } from "react-router";
 import { useParcelTrackingQuery } from "@/redux/features/parcel/parcelApi";
 import type { IStatusLog, TParcelStatus } from "@/types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { User, Package, Clock, CheckCircle2, XCircle } from "lucide-react";
+import { format } from "date-fns";
 
 export default function ParcelTracker() {
   const { trackingId } = useParams();
   const { data, isLoading, isError } = useParcelTrackingQuery(trackingId!);
+const isMobile = window.innerWidth < 640;
 
   let parcel;
   if (!isLoading && !isError && data) {
@@ -68,10 +70,10 @@ export default function ParcelTracker() {
 
       <Card className="shadow-lg border-t-4 border-primary">
         <CardHeader>
-          <CardTitle className="flex items-center justify-between">
+          <CardTitle className="flex flex-col sm:flex-row items-center justify-between">
             <div className="flex items-center gap-2 text-primary">
-              <Package className="w-6 h-6" />
-              <span>Tracking ID: {parcel.trackingId}</span>
+              <Package className="w-6 h-6 text-center" />
+              <span className="mb-2 text-center leading-5">Tracking ID: {parcel.trackingId}</span>
             </div>
             {isCancelled ? (
               <span className="text-red-600 font-semibold flex items-center gap-1">
@@ -133,8 +135,8 @@ export default function ParcelTracker() {
       {/* --- Tracking Progress --- */}
       <Stepper
         defaultValue={activeStep}
-        orientation="horizontal"
-        className="px-4"
+        orientation={isMobile ? "vertical" : "horizontal"}
+        className="px-4 w-full my-"
       >
         {(() => {
           const baseOrder: TParcelStatus[] = [
@@ -304,22 +306,24 @@ export default function ParcelTracker() {
                               : "text-muted-foreground"
                           )}
                         >
-                          {new Date(stepData.timestamp).toLocaleString()}
+                          {format(stepData.timestamp, "d/M/y hh:mm a")}
                         </StepperDescription>
                         <div
                           className={cn(
-                            "flex items-center justify-center gap-1 text-xs",
+                            "flex items-start justify-center gap-1 text-xs",
                             isUpcoming ? "text-gray-400" : "text-gray-500"
                           )}
                         >
                           <MapPin className="w-3 h-3" /> {stepData.location}
                         </div>
+                          {stepData.notes && <div className="flex items-start justify-start gap- text-xs text-muted-foreground"><p><BookmarkCheck size={12}/></p><p>{stepData.notes}</p></div>}
+                          
                       </>
                     )}
                   </div>
                 </StepperTrigger>
 
-                {stepNumber < arr.length && (
+                {!isMobile&& stepNumber < arr.length && (
                   <StepperSeparator
                     className={cn(
                       "absolute inset-x-0 top-3 left-[calc(50%+0.75rem+0.125rem)] -order-1 m-0 -translate-y-1/2 group-data-[orientation=horizontal]/stepper:w-[calc(100%-1.5rem-0.25rem)] group-data-[orientation=horizontal]/stepper:flex-none",

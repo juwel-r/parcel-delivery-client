@@ -12,7 +12,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
-import { UpdateStatusModal } from "@/components/modules/Sender/UpdateStatusModal";
+import { UpdateStatusModal } from "@/components/modules/Admin/UpdateStatusModal";
 import type { IParcel } from "@/types";
 import Parcel from "@/assets/icons/Parcel";
 import Document from "@/assets/icons/Document";

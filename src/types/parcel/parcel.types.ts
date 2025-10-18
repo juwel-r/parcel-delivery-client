@@ -24,7 +24,7 @@ export interface IStatusLog {
   status: TParcelStatus;
   location: string;
   notes?: string;
-  updatedBy?: string;
+  updatedBy: string;
   timestamp: Date | string;
 }
 

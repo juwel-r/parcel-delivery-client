@@ -3,7 +3,7 @@ import type { IResponse, IUser, TIsActive } from "@/types";
 
 const userApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getAllUsers: builder.query<IResponse<IUser[]>, void>({
+    getAllUsers: builder.query<IResponse<IUser[]>, unknown>({
       query: (params) => ({
         url: "/user",
         method: "GET",
