@@ -15,7 +15,7 @@ import type { IParcel } from "@/types";
 import Parcel from "@/assets/icons/Parcel";
 import Document from "@/assets/icons/Document";
 import { Link } from "react-router";
-import { ParcelCardSkeleton } from "@/components/modules/Skeleton/ParcelListSkeleton";
+import { ParcelCardSkeleton } from "@/components/Skeleton/ParcelListSkeleton";
 import { History } from "lucide-react";
 import {
   Tooltip,
@@ -86,7 +86,7 @@ export default function ReceivedParcels() {
                           Delivery Fee: ৳{item.fee}
                         </p>
                         <p className="text-sm text-muted-foreground">
-                          From:{" "}
+                          From:
                           <strong>
                             {(item.sender as { name: string }).name}
                           </strong>
@@ -110,7 +110,10 @@ export default function ReceivedParcels() {
                     </div>
                     <div className="text-muted-foreground text-sm space-y-1">
                       <p>Confirmed: </p>{" "}
-                      <p> {format(new Date(item.updatedAt), "dd/M/y HH:mm a")}</p>
+                      <p>
+                        {" "}
+                        {format(new Date(item.updatedAt), "dd/M/y HH:mm a")}
+                      </p>
                     </div>
 
                     <div className="col-span-2 lg:col-span-2 flex items-center justify-center">

@@ -1,7 +1,7 @@
 import type { ComponentType } from "react";
 
 export type { IUserRegister } from "./auth/auth.type";
-export type { IUser, TRole, AuthProvider } from "./user/user.types";
+export type { IUser, TRole, AuthProvider, TIsActive } from "./user/user.types";
 export type { IParcel, IStatusLog, TParcelStatus } from "./parcel/parcel.types";
 
 export interface IResponse<T> {

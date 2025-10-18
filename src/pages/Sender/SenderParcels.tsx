@@ -22,7 +22,7 @@ import { toast } from "sonner";
 import { DeleteConfirmation } from "@/components/DeleteConfirmation";
 import { Spinner } from "@/components/ui/spinner";
 import { getErrorMessage } from "@/utils/getErrorMessage";
-import { ParcelCardSkeleton } from "@/components/modules/Skeleton/ParcelListSkeleton";
+import { ParcelCardSkeleton } from "@/components/Skeleton/ParcelListSkeleton";
 import { History, X } from "lucide-react";
 import {
   Tooltip,
@@ -137,7 +137,7 @@ export default function SenderParcels() {
                         onConfirm={() => handleCancel(item._id)}
                         content="Cancel this parcel."
                       >
-                        <button 
+                        <button
                           disabled={
                             !(
                               item.currentStatus === "REQUESTED" ||

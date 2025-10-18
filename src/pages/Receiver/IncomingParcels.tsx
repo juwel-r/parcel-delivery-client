@@ -22,7 +22,7 @@ import { toast } from "sonner";
 import { DeleteConfirmation } from "@/components/DeleteConfirmation";
 import { Spinner } from "@/components/ui/spinner";
 import { getErrorMessage } from "@/utils/getErrorMessage";
-import { ParcelCardSkeleton } from "@/components/modules/Skeleton/ParcelListSkeleton";
+import { ParcelCardSkeleton } from "@/components/Skeleton/ParcelListSkeleton";
 import { CheckCheck, History } from "lucide-react";
 import {
   Tooltip,
@@ -54,7 +54,9 @@ export default function IncomingParcels() {
     <>
       <Card className="w-full md:max-w-3/4 mx-auto">
         <CardHeader>
-          <CardTitle className="text-center text-2xl">Incoming Parcels</CardTitle>
+          <CardTitle className="text-center text-2xl">
+            Incoming Parcels
+          </CardTitle>
           <CardDescription className="text-center">
             All parcel of you are shown in below. You can search and filter them
             as need.

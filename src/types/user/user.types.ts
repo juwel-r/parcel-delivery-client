@@ -1,4 +1,5 @@
-export type TRole =  "ADMIN" | "SENDER" | "RECEIVER";
+export type TRole = "ADMIN" | "SENDER" | "RECEIVER";
+export type TIsActive = "ACTIVE" | "INACTIVE" | "BLOCK";
 
 export interface IUser {
   _id: string;
@@ -8,7 +9,7 @@ export interface IUser {
   phone: string;
   address: string;
   role: string;
-  isActive: string;
+  isActive: TIsActive;
   isVerified: boolean;
   isDeleted: boolean;
   authProvider: AuthProvider[];

@@ -1,0 +1,1 @@
+<BadgeCheck size={256} color="#00ffb3" strokeWidth={3} />
