@@ -17,7 +17,7 @@ export interface IParcel {
   _id: string;
   createdAt: string;
   updatedAt: string;
-  deliveryConfirmed:Date | string
+  deliveryConfirmed: Date | string;
 }
 
 export interface IStatusLog {
@@ -35,3 +35,24 @@ export type TParcelStatus =
   | "IN_TRANSIT"
   | "DELIVERED"
   | "CANCELLED";
+
+export interface ChartItem {
+  month?: string | number;
+  status?: string;
+  count: number;
+}
+
+export interface OverviewCards {
+  totalParcels: number;
+  delivered: number;
+  inTransit: number;
+  pendingOrCancelled: number;
+}
+
+export interface IDashboardData {
+  cards: OverviewCards;
+  charts: {
+    monthlyShipments: ChartItem[];
+    statusDistribution: ChartItem[];
+  };
+}

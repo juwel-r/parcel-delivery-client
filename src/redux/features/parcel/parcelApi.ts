@@ -1,5 +1,5 @@
 import { baseApi } from "@/redux/baseApi";
-import type { IParcel, IResponse, IStatusLog } from "@/types";
+import type { IDashboardData, IParcel, IResponse, IStatusLog } from "@/types";
 
 const parcelApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -12,15 +12,19 @@ const parcelApi = baseApi.injectEndpoints({
       invalidatesTags: ["PARCEL"],
     }),
 
-    getMyParcel: builder.query<IResponse<IParcel[]>, void>({
-      query: () => ({
+    getMyParcel: builder.query<IResponse<IParcel[]>, unknown>({
+      query: (params) => ({
         url: `/parcel/my-parcels`,
         method: "GET",
+        params,
       }),
       providesTags: ["PARCEL"],
     }),
 
-    updateStatus: builder.mutation<  IResponse<IParcel>,  { parcelId: string; data: Partial<IStatusLog> }>({
+    updateStatus: builder.mutation<
+      IResponse<IParcel>,
+      { parcelId: string; data: Partial<IStatusLog> }
+    >({
       query: ({ parcelId, data }) => ({
         url: `/parcel/${parcelId}/update`,
         method: "PATCH",
@@ -45,10 +49,11 @@ const parcelApi = baseApi.injectEndpoints({
       invalidatesTags: ["PARCEL"],
     }),
 
-    receiverUpcomingParcels: builder.query<IResponse<IParcel[]>, void>({
-      query: () => ({
+    receiverUpcomingParcels: builder.query<IResponse<IParcel[]>, unknown>({
+      query: (params) => ({
         url: "/parcel/receiver/upcoming-parcel",
         method: "GET",
+        params,
       }),
       // transformResponse:(res:IResponse<IParcel[]>)=>res.data,
       providesTags: ["PARCEL"],
@@ -79,13 +84,21 @@ const parcelApi = baseApi.injectEndpoints({
       providesTags: ["PARCEL"],
     }),
 
-    updateParcelStatus:builder.mutation<IResponse<null>, string>({
-      query:(parcelId)=>({
-        url:`/parcel/${parcelId}/block`,
-        method:"PATCH"
+    updateParcelStatus: builder.mutation<IResponse<null>, string>({
+      query: (parcelId) => ({
+        url: `/parcel/${parcelId}/block`,
+        method: "PATCH",
       }),
-      invalidatesTags:["PARCEL"]
-    })
+      invalidatesTags: ["PARCEL"],
+    }),
+
+    getDashboardOverview: builder.query<IDashboardData, void>({
+      query: () => ({
+        url: "parcel/dashboard-overview",
+        method: "GET",
+      }),
+      transformResponse:(res:IResponse<IDashboardData>)=>res.data
+    }),
   }),
 });
 
@@ -99,5 +112,6 @@ export const {
   useConfirmDeliveryMutation,
   useDeliveredParcelQuery,
   useGetAllParcelsQuery,
-  useUpdateParcelStatusMutation
+  useUpdateParcelStatusMutation,
+  useGetDashboardOverviewQuery,
 } = parcelApi;

@@ -27,7 +27,7 @@ type PaginationProps = {
 export default function PaginationCompo({
   currentPage,
   totalPages,
-  paginationItemsToDisplay = 5,
+  paginationItemsToDisplay = 4,
   setPage,
   setLimit,
 }: PaginationProps) {
@@ -119,7 +119,7 @@ export default function PaginationCompo({
       {/* Results per page */}
       <div className="flex flex-1 justify-end">
         <Select
-          onValueChange={(value) => setLimit(value)}
+          onValueChange={(value) => {setLimit(value); setPage(1)}}
           defaultValue="10"
           aria-label="Results per page"
         >

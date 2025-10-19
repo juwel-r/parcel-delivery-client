@@ -50,7 +50,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { Spinner } from "@/components/ui/spinner";
 
-export function CreateParcel() {
+export default function CreateParcel() {
   const { data: receivers, isLoading: isLoadingReceivers } =
     useGetReceiversQuery();
   const [createParcel, { isLoading }] = useCreateParcelMutation();

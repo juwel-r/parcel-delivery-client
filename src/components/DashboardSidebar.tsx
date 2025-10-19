@@ -24,10 +24,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   return (
     <Sidebar {...props}>
-      <SidebarHeader>
+      <SidebarHeader  className="sm:pl-8 sm:pt-5">
         <Link to={"/"}><Logo /></Link>
       </SidebarHeader>
-      <SidebarContent>
+      <SidebarContent  className="sm:pl-4">
         
         {/* We create a SidebarGroup for each parent. */}
         {data.navMain.map((item) => (

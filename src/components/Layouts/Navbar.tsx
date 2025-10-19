@@ -147,7 +147,7 @@ export default function Navbar() {
           </div>
         </div>
         {/* Right side */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 mr-2">
           <ThemeToggler />
 
           {!isLoading && data ? (

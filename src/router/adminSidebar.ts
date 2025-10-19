@@ -1,8 +1,7 @@
-import AddParcel from "@/pages/Admin/AllParcels";
-import AllUsers from "@/pages/Admin/AllUsers";
-import type { ISidebarItem } from "@/types";
 import { lazy } from "react";
-
+const AddParcel = lazy(()=>import("@/pages/Admin/AllParcels"));
+const AllUsers = lazy(()=>import("@/pages/Admin/AllUsers"));
+import type { ISidebarItem } from "@/types";
 const Analytics = lazy(() => import("@/pages/Admin/Analytics"));
 
 export const adminSidebar: ISidebarItem[] = [
@@ -24,26 +23,6 @@ export const adminSidebar: ISidebarItem[] = [
         url: "/admin/all-users",
         component: AllUsers,
       },
-      // {
-      //   title: "Active Users",
-      //   url: "/admin/all-users",
-      //   component: AllUsers,
-      // },
-      // {
-      //   title: "Sender Users",
-      //   url: "/admin/all-users",
-      //   component: AllUsers,
-      // },
-      // {
-      //   title: "Receiver Users",
-      //   url: "/admin/all-users",
-      //   component: AllUsers,
-      // },
-      // {
-      //   title: "Deleted Users",
-      //   url: "/admin/all-users",
-      //   component: AllUsers,
-      // },
     ],
   },
   {

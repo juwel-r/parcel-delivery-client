@@ -1,21 +1,22 @@
-
-import { CreateParcel } from "@/pages/Sender/CreateParcel";
-import SenderParcels from "@/pages/Sender/SenderParcels";
 import type { ISidebarItem } from "@/types";
+import { lazy } from "react";
+
+const CreateParcel = lazy(() => import("@/pages/Sender/CreateParcel"));
+const SenderParcels = lazy(() => import("@/pages/Sender/SenderParcels"));
 
 export const senderSidebar: ISidebarItem[] = [
   {
     title: "Dashboard",
     items: [
       {
-        title: "Create Parcel",
-        url: "/sender/create-parcel",
-        component: CreateParcel,
-      },
-      {
         title: "My Parcels",
         url: "/sender/my-parcels",
         component: SenderParcels,
+      },
+      {
+        title: "Create Parcel",
+        url: "/sender/create-parcel",
+        component: CreateParcel,
       },
     ],
   },

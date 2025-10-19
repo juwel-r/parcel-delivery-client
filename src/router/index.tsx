@@ -1,25 +1,35 @@
 import App from "@/App";
-import DashboardLayout from "@/components/Layouts/DashboardLayout";
 import { role } from "@/constant/role";
-import About from "@/pages/Public/About";
-import Login from "@/pages/Public/Login";
-import Registration from "@/pages/Public/Registration";
-import Unauthorize from "@/pages/Public/Unauthorize";
 import { checkAuthorization } from "@/utils/checkAuth";
 import { generateRoutes } from "@/utils/generateRoutes";
 import { createBrowserRouter, Navigate } from "react-router";
 import { adminSidebar } from "./adminSidebar";
 import { senderSidebar } from "./senderSidebar";
 import { receiverSidebar } from "./receiverSidebar";
-import Contact from "@/pages/Public/Contact";
 import type { TRole } from "@/types";
-import ParcelTracker from "@/components/ParcelTracker";
+
+import { lazy } from "react";
+import HomePage from "@/pages/Public/HomePage";
+
+const DashboardLayout = lazy(
+  () => import("@/components/Layouts/DashboardLayout")
+);
+const About = lazy(() => import("@/pages/Public/About"));
+const Login = lazy(() => import("@/pages/Public/Login"));
+const Registration = lazy(() => import("@/pages/Public/Registration"));
+const Unauthorize = lazy(() => import("@/pages/Public/Unauthorize"));
+const Contact = lazy(() => import("@/pages/Public/Contact"));
+const ParcelTracker = lazy(() => import("@/components/ParcelTracker"));
 
 export const router = createBrowserRouter([
   {
     Component: App,
     path: "/",
     children: [
+      {
+        Component: HomePage,
+        index: true,
+      },
       {
         Component: About,
         path: "about",
@@ -28,10 +38,10 @@ export const router = createBrowserRouter([
         Component: Contact,
         path: "contact",
       },
-        {
-    Component: ParcelTracker,
-    path: "tracking/:trackingId",
-  },
+      {
+        Component: ParcelTracker,
+        path: "tracking/:trackingId",
+      },
     ],
   },
   {
@@ -47,7 +57,7 @@ export const router = createBrowserRouter([
     Component: checkAuthorization(DashboardLayout, role.sender as TRole),
     path: "/sender",
     children: [
-      { index: true, element: <Navigate to="/sender/create-parcel" /> },
+      { index: true, element: <Navigate to="/sender/my-parcels" /> },
       ...generateRoutes(senderSidebar),
     ],
   },
@@ -72,5 +82,4 @@ export const router = createBrowserRouter([
     Component: Unauthorize,
     path: "/unauthorize",
   },
-
 ]);

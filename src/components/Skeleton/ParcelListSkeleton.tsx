@@ -2,7 +2,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 
 export function ParcelCardSkeleton() {
   return (
-    <div className="p-4 mx-4 rounded-xl border border-neutral-700 bg-neutral-900 flex justify-between items-center space-x-4 animate-in fade-in-50">
+    <div className="p-4 m-4 rounded-xl border border-neutral-700 bg-neutral-900 flex justify-between items-center space-x-4 animate-in fade-in-50">
       {/* Left side - Icon and info */}
       <div className="flex space-x-3 w-full">
         {/* Icon */}
