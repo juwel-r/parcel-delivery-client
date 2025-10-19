@@ -19,7 +19,7 @@ import {
   useGetAllParcelsQuery,
   useUpdateParcelStatusMutation,
 } from "@/redux/features/parcel/parcelApi";
-import {  History } from "lucide-react";
+import { History } from "lucide-react";
 import { DeleteConfirmation } from "@/components/DeleteConfirmation";
 import { useState } from "react";
 import { Link } from "react-router";
@@ -31,8 +31,28 @@ import { getErrorMessage } from "@/utils/getErrorMessage";
 import { Spinner } from "@/components/ui/spinner";
 import { UpdateStatusModal } from "@/components/modules/Admin/UpdateStatusModal";
 
-
 import PaginationCompo from "@/components/PaginationCompo";
+import { SelectDemo } from "@/components/comp-195";
+
+interface IItem {
+  value: string;
+  label: string;
+}
+
+const items: IItem[] = [
+  {
+    value: "",
+    label: "Select",
+  },
+  {
+    value: "Document",
+    label: "Document",
+  },
+  {
+    value: "Parcel",
+    label: "Parcel",
+  },
+];
 
 export default function AlParcels() {
   const [limit, setLimit] = useState("10");
@@ -60,7 +80,7 @@ export default function AlParcels() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>All Users</CardTitle>
+        <CardTitle>All Parcels</CardTitle>
         <CardDescription>
           Manage all parcels — view details, status, and perform block/unblock
           actions.
@@ -71,7 +91,7 @@ export default function AlParcels() {
           <Table>
             <TableHeader>
               <TableRow className="hover:bg-transparent">
-                <TableHead>Type</TableHead>
+                <TableHead className="hover:cursor-pointer">Type</TableHead>
                 <TableHead>
                   Sender & <br />
                   Dispatched
@@ -191,6 +211,7 @@ export default function AlParcels() {
           setPage={setPage}
         />
       </CardFooter>
+      <div><SelectDemo items={items}/></div>
     </Card>
   );
 }
