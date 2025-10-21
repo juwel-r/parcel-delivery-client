@@ -22,8 +22,12 @@ import { loginSchema } from "@/utils/zodSchema";
 import { useForm } from "react-hook-form";
 import type z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Link, useLocation, useNavigate } from "react-router";
-import { authApi, useLoginMutation } from "@/redux/features/auth/authApi";
+import { Link, Navigate, useLocation, useNavigate } from "react-router";
+import {
+  authApi,
+  useLoginMutation,
+  useUserInfoQuery,
+} from "@/redux/features/auth/authApi";
 import { toast } from "sonner";
 import { useAppDispatch } from "@/redux/hook";
 import { Spinner } from "@/components/ui/spinner";
@@ -32,7 +36,8 @@ export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-  const [login, {isLoading}] = useLoginMutation();
+  const [login, { isLoading }] = useLoginMutation();
+  const { data, isLoading: isLoadingUserInfo } = useUserInfoQuery();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
@@ -61,6 +66,10 @@ export function LoginForm({
       toast.error(error.data.message || "Something went wrong.");
     }
   };
+
+  if (!isLoadingUserInfo && data?.email) {
+    return <Navigate to={"/"}></Navigate>;
+  }
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
