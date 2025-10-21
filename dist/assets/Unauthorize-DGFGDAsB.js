@@ -1,0 +1,1 @@
+import{j as n,B as s,L as t}from"./index-DgFVON7e.js";function o(){return n.jsxs("div",{children:["This is Unauthorize Component",n.jsx("br",{}),n.jsx(s,{children:n.jsx(t,{to:"/",children:"Home"})})]})}export{o as default};
