@@ -22,7 +22,7 @@ export default function MyParcels() {
   const id = useId();
 
 
-  const { data: myParcels, isLoading } = useGetMyParcelQuery();
+  const { data: myParcels, isLoading } = useGetMyParcelQuery({});
 
   console.log(myParcels);
 

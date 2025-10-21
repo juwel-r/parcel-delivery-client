@@ -135,7 +135,7 @@ export default function AllUsers() {
                             >
                               <button
                                 disabled={isLoadingUpdate}
-                                className="flex items-center justify-center gap-1 disabled:bg-gray-500 disabled:cursor-not-allowed bg-primary px-2 py-1 rounded-xs  w-[66px]"
+                                className="flex items-center justify-center gap-1 disabled:bg-gray-500 disabled:cursor-not-allowed bg-primary px-2 py-1 rounded-sm text-white  w-[66px]"
                               >
                                 Unblock {loading === user._id && <Spinner />}
                               </button>
@@ -151,7 +151,7 @@ export default function AllUsers() {
                             >
                               <button
                                 disabled={isLoadingUpdate}
-                                className="flex items-center justify-center gap-1 disabled:bg-gray-500 disabled:cursor-not-allowed bg-primary px-2 py-1 rounded-xs  w-[66px]"
+                                className="flex items-center justify-center gap-1 disabled:bg-gray-500 disabled:cursor-not-allowed bg-primary px-2 py-1 rounded-sm text-white  w-[66px]"
                               >
                                 Block {loading === user._id && <Spinner />}
                               </button>

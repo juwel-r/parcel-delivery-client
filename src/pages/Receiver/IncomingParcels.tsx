@@ -76,7 +76,7 @@ export default function IncomingParcels() {
 
   useEffect(() => {
     const uniqueTypes: string[] = [
-      ...new Set(myParcels?.data.map((data) => data.type)),
+      ...new Set(myParcels?.data?.map((data) => data.type)),
     ];
     if (uniqueTypes.length > 1) {
       setTypeNames(uniqueTypes);
@@ -111,7 +111,7 @@ export default function IncomingParcels() {
           />
         </CardHeader>
 
-        {!isLoading && !myParcels?.data.length ? (
+        {!isLoading && !myParcels?.data?.length ? (
           <h1 className="text-2xl text-muted-foreground text-center my-5">
             No Data to show.
           </h1>
@@ -129,8 +129,8 @@ export default function IncomingParcels() {
             ) : (
               <CardContent className="space-y-5 p-4 w-full">
                 {!isLoading &&
-                  myParcels?.data.length &&
-                  myParcels.data.map((item: IParcel) => (
+                  myParcels?.data?.length &&
+                  myParcels?.data?.map((item: IParcel) => (
                     <div
                       key={item._id}
                       className="relative flex w-full items-start gap-2 rounded-md border border-input p-4 shadow-xs outline-none has-data-[state=checked]:border-primary/50"

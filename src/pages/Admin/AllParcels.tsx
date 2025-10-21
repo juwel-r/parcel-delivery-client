@@ -204,9 +204,9 @@ export default function AlParcels() {
                                   parcel.currentStatus === "DELIVERED" ||
                                   parcel.currentStatus === "CANCELLED"
                                 }
-                                className="min-w-[67px] bg-primary rounded-xs py-1 disabled:bg-gray-500 disabled:cursor-not-allowed disabled:opacity-70"
+                                className="min-w-[67px] bg-primary rounded-sm py-1 disabled:bg-gray-500 disabled:cursor-not-allowed disabled:opacity-70"
                               >
-                                <span className="px-2 rounded-sm flex justify-center items-center mx-auto">
+                                <span className="px-2 text-white flex justify-center items-center mx-auto">
                                   {parcel.isBlock ? "Unblock" : "Block"}
                                   {loading === parcel._id && <Spinner />}
                                 </span>

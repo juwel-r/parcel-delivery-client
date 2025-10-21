@@ -79,10 +79,10 @@ const LandingPage = () => {
               Manage users, monitor parcels, and ensure smooth operations.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <Link className="mx-auto" to="/dashboard/users">
+              <Link className="mx-auto" to="/admin/all-users">
                 <Button>Manage Users</Button>
               </Link>
-              <Link className="mx-auto" to="/dashboard/parcels">
+              <Link className="mx-auto" to="/admin/all-parcel">
                 <Button variant="outline">View All Parcels</Button>
               </Link>
             </div>
